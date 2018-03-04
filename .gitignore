@@ -1,0 +1,7 @@
+.idea
+*.log
+nbproject
+.DS_Store
+ehthumbs.db
+Icon
+data

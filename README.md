@@ -1,1 +1,1 @@
-# poletavi-kanarci
+# Poletaví kanárci
