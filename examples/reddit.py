@@ -5,9 +5,9 @@ from datetime import datetime
 
 
 def run():
-    reddit = praw.Reddit(client_id=pw.client_id, client_secret=pw.client_secret,
-                         password=pw.password, user_agent=pw.user_agent,
-                         username=pw.username)
+    reddit = praw.Reddit(client_id=pw.reddit.client_id, client_secret=pw.reddit.client_secret,
+                         password=pw.reddit.password, user_agent=pw.reddit.user_agent,
+                         username=pw.reddit.username)
 
     submissions = reddit.subreddit("nba").new(limit=2)
 
