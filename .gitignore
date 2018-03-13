@@ -6,3 +6,4 @@ ehthumbs.db
 Icon
 data
 passwords*
+__pycache__/
