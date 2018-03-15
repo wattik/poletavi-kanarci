@@ -1,31 +1,34 @@
-import pprint
+from pprint import pprint
+from time import sleep
 
-import boto3
+from src.aws.sqs import Item, Queue
 
-# session = boto3.Session(profile_name='default')
-# s3 = session.resource('s3')
-#
-# for bucket in s3.buckets.all():
-#     print(bucket.name)
 
-# Get the service resource
-import time
+def run():
+    queue = Queue.get_by_name("test")
 
-sqs = boto3.resource('sqs')
+    for i in range(10):
+        item = Item.from_text(
+            "message %d" % i,
+            attributes={"test_attribute": i}
+        )
+        queue.add(item)
+        print("Message sent %d" % i)
 
-# # Create the queue. This returns an SQS.Queue instance
-# queue = sqs.create_queue(QueueName='test', Attributes={'DelaySeconds': '5'})
-queue = sqs.get_queue_by_name(QueueName='test')
+    print("Waiting for messages to safely arrive.")
+    sleep(1)
 
-response = queue.send_message(MessageBody="init_message")
-pprint.pprint(response)
+    for i in range(10):
+        item = queue.pop()
+        print("%d" % i)
+        print("Item body:" + item.body)
+        pprint(item.sqs_message_attributes)
 
-# for i in range(1000):
-#     response = queue.send_message(MessageBody="message %d" % i)
+    # items = queue.pop_many()
+    # for item in items:
+    #     print("Item body:" + item.body)
+    #     pprint(item.sqs_message_attributes)
 
-# Process messages by printing out body and optional author name
-for message in queue.receive_messages(MaxNumberOfMessages=10):
-    print("message: %s" % message.body)
 
-    # Let the queue know that the message is processed
-    message.delete()
+if __name__ == '__main__':
+    run()
