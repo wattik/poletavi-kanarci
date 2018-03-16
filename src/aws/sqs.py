@@ -66,7 +66,7 @@ class Item(ABC):
         raise ValueError("Data type not recognized.")
 
     @staticmethod
-    def to_sqs_format(value) -> Dict[str, str]:
+    def value_to_sqs_format(value) -> Dict[str, str]:
         data_type, string_value = Item._normalize(value)
         return {
             Item.STRING_VALUE: string_value,
@@ -74,7 +74,7 @@ class Item(ABC):
         }
 
     @staticmethod
-    def from_sqs_format(value: Dict[str, str]) -> object:
+    def value_from_sqs_format(value: Dict[str, str]) -> object:
         return Item._retype(value[Item.DATA_TYPE], value[Item.STRING_VALUE])
 
 
@@ -98,7 +98,7 @@ class AddItem(Item):
     def sqs_message_attributes(self):
         attributes = {}
         for key, value in self.message_attributes.items():
-            attributes[key] = Item.to_sqs_format(value)
+            attributes[key] = Item.value_to_sqs_format(value)
 
         return attributes
 
@@ -111,7 +111,7 @@ class ReceivedItem(Item):
     def message_attributes(self):
         message_attributes = {}
         for key, value in self.sqs_message_attributes.items():
-            message_attributes[key] = Item.from_sqs_format(value)
+            message_attributes[key] = Item.value_from_sqs_format(value)
 
         return message_attributes
 

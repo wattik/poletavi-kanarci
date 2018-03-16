@@ -1,0 +1,1 @@
+SCRAPING_QUEUE_NAME = "scraping_data"
